@@ -1,65 +1,71 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import sha256 from "crypto-js/sha256";
+import Cookies from "universal-cookie";
 import { Input, Button } from "@material-ui/core";
-import { Switch, Route, useHistory } from "react-router";
+import { useHistory } from "react-router";
 
-const Login = ({ setAuthentication, setTxn }) => {
-  const [mobileNumber, setMobileNumber] = useState(0);
+const Verify = (props) => {
   const [input, setInput] = useState("");
-  const [error, setError] = useState("");
-
+  const [error, setError] = useState(null);
+  const txn = props.txn;
+  const cookies = new Cookies();
   let history = useHistory();
-
-  const inputUpdate = (e) => {
-    const newInput = e.target.value;
-    setInput(newInput);
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const encryptOTP = sha256(input).toString();
+    const txxn = txn.toString();
+
     if (input !== "") {
       const pattern = new RegExp(/^[0-9\b]+$/);
-
       if (pattern.test(input) === true) {
-        if (input.length === 10) {
+        if (input.length === 6) {
           axios
-            .post(`https://cdn-api.co-vin.in/api/v2/auth/public/generateOTP`, {
-              mobile: mobileNumber,
+            .post(`https://cdn-api.co-vin.in/api/v2/auth/public/confirmOTP`, {
+              otp: encryptOTP,
+              txnId: txxn,
             })
             .then((res) => {
-              //Getting transaction Id here
-              setTxn(res.data.txnId); //Sending TxnID to OTP verification
-              console.log(res.data.txnId);
-              setAuthentication(true);
-              history.push("/verify");
+              console.log(res.data.token);
+              const token = res.data.token;
+              cookies.set("cowinToken", token, { path: "/center" });
+              props.setVerifyAuth(true);
+              history.push("/center");
             })
             .catch((err) => {
-              if (err.response.status === 500) {
-                console.log("Internal Server Error");
+              if (err) {
+                console.log(err);
               } else {
                 alert("wrong input");
               }
-              console.log(err);
             });
+          // const confirmOTP = async () => {
+          //   const data = await
+          // };
+          // confirmOTP();
         } else {
           setError("Please enter 10 digit mobile number");
         }
       } else {
-        setError("Please enter mobile number");
+        setError("Please enter valid OTP");
       }
     }
-  };
 
+    // const sendOTP = async () => {
+
+    // };
+    // sendOTP();
+  };
   useEffect(() => {
     setError("");
-    setMobileNumber(input);
   }, [input]);
 
   return (
     <div className="Login">
       <div className="login-heading">
-        <h1>Register or Sign In for Vaccination</h1>
-        <p>An OTP will be sent to your mobile number for verification</p>
+        <h1 id="verification-heading">OTP Verification</h1>
+        <p>Please enter OTP</p>
       </div>
       <form onSubmit={handleSubmit} className="login-form">
         <Input
@@ -67,8 +73,10 @@ const Login = ({ setAuthentication, setTxn }) => {
           id="login-input"
           type="tel"
           pattern="[0-9]{10}"
-          placeholder="Enter your mobile number"
-          onChange={inputUpdate}
+          placeholder="Enter OTP"
+          onChange={(event) => {
+            setInput(event.target.value);
+          }}
           value={input}
           disableUnderline={true}
           required
@@ -102,4 +110,4 @@ const Login = ({ setAuthentication, setTxn }) => {
   );
 };
 
-export default Login;
+export default Verify;

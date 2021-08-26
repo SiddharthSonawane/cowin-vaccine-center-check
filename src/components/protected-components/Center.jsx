@@ -12,83 +12,71 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
 } from "@material-ui/core";
 import axios from "axios";
 
-//************************import for Table ************************/
-import { makeStyles } from "@material-ui/core/styles";
-const useStyles = makeStyles({
-  table: {
-    minWidth: 650,
-  },
-});
-
 const Center = () => {
-  const classes = useStyles();
   const [showInput, setShowInput] = useState(true);
   const [stateValue, setStateValue] = useState("");
   const [districtValue, setDistrictValue] = useState("");
   const [inputPin, setInputPin] = useState("");
-  const [recordByPin, setRecordByPin] = useState([{}]);
-  //hospName: "", address: "", feeType: "", vaccine: ""
+  const [record, setRecord] = useState([{}]);
+
   const [allStates, setAllStates] = useState([]);
   const [alldistricts, setAllDistricts] = useState([]);
 
   const [search, setSearch] = useState(false);
   const [showCenter, setShowCenter] = useState(false);
 
-  // useEffect(() => {
-  //   const newData = async () => {
-  //     const myStatesData = await axios.get(
-  //       "https://cdn-api.co-vin.in/api/v2/admin/location/states"
-  //     );
-  //     let recordArr = [];
-  //     myStatesData.data.states.forEach((e) => {
-  //       recordArr.push(e.state_name);
-  //     });
-  //     setAllStates(recordArr);
-  //   };
-  //   newData();
-  // }, []);
-
   useEffect(() => {
-    setRecordByPin([{}]);
-    // return () => {
-    //   cleanup
-    // }
+    const newData = async () => {
+      const myStatesData = await axios.get(
+        "https://cdn-api.co-vin.in/api/v2/admin/location/states"
+      );
+      let recordArr = [];
+      console.log(myStatesData);
+      myStatesData.data.states.forEach((e) => {
+        recordArr.push(e.state_name);
+        console.log(e.state_id, e.state_name);
+      });
+      setAllStates(recordArr);
+    };
+    newData();
   }, []);
 
   useEffect(() => {
-    const date = new Date();
-    const utc = new Date().toJSON().slice(0, 10).split("-").reverse().join("-");
-    const dataByPin = async () => {
-      const pinData = await axios.get(
-        "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=" +
-          inputPin +
-          "&date=" +
-          utc
-      );
+    setRecord([{}]);
+  }, [inputPin]);
 
-      pinData.data.sessions.forEach((e) => {
-        setRecordByPin((prev) => {
-          return [
-            ...prev,
-            {
-              hospName: e.name,
-              address: e.address,
-              feeType: e.fee_type,
-              vaccine: e.vaccine,
-            },
-          ];
-        });
-      });
-      // const { name } = pinData.data.sessions;
-      console.log(recordByPin);
-    };
+  // useEffect(() => {
+  //   const date = new Date();
+  //   const utc = new Date().toJSON().slice(0, 10).split("-").reverse().join("-");
+  //   const dataByPin = async () => {
+  //     const pinData = await axios.get(
+  //       "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=" +
+  //         inputPin +
+  //         "&date=" +
+  //         utc
+  //     );
 
-    dataByPin();
-  }, [search]);
+  //     pinData.data.sessions.forEach((e) => {
+  //       setRecord((prev) => {
+  //         return [
+  //           ...prev,
+  //           {
+  //             hospName: e.name,
+  //             address: e.address,
+  //             feeType: e.fee_type,
+  //             vaccine: e.vaccine,
+  //           },
+  //         ];
+  //       });
+  //     });
+  //     // const { name } = pinData.data.sessions;
+  //   };
+
+  //   dataByPin();
+  // }, [search]);
 
   return (
     <div id="Center">
@@ -129,26 +117,50 @@ const Center = () => {
           </div>
           <div id="center-input">
             {showInput ? (
-              <Input
-                style={{ backgroundColor: "white", borderRadius: "50px" }}
-                id="center-input-pin"
-                placeholder="Enter your PIN"
-                disableUnderline={true}
-                value={inputPin}
-                onChange={(e) => {
-                  setInputPin(e.target.value);
-                }}
-              ></Input>
+              <div>
+                <Input
+                  style={{ backgroundColor: "white", borderRadius: "50px" }}
+                  id="center-input-pin"
+                  placeholder="Enter your area PINCODE"
+                  disableUnderline={true}
+                  value={inputPin}
+                  onChange={(e) => {
+                    setInputPin(e.target.value);
+                  }}
+                ></Input>
+                <Button
+                  style={{
+                    backgroundColor: "rgb(0, 32, 96)",
+                    color: "#FFFFFF",
+                    width: "auto",
+                    height: "auto",
+                    margin: "0 5rem",
+                    padding: "1rem 3rem",
+                    borderRadius: "50px",
+                  }}
+                  onClick={() => {
+                    if (inputPin !== "") {
+                      setSearch(!search);
+                      setShowCenter(true);
+                      console.log(search);
+                    } else {
+                      alert("please enter pin");
+                    }
+                  }}
+                >
+                  SEARCH
+                </Button>
+              </div>
             ) : (
               <div id="select-by-district">
-                {/* <FormControl id="form-control" variant="outlined">
+                <FormControl id="form-control" variant="outlined">
                   <InputLabel id="demo-simple-select-outlined-label">
                     State
                   </InputLabel>
                   <Select
                     onChange={async (e, index) => {
                       setStateValue(e.target.value);
-
+                      setRecord([{}]);
                       const myDistrictData = await axios.get(
                         "https://cdn-api.co-vin.in/api/v2/admin/location/districts/" +
                           index.props.value
@@ -193,10 +205,10 @@ const Center = () => {
                       return <MenuItem value={index}>{district}</MenuItem>;
                     })}
                   </Select>
-                </FormControl> */}
+                </FormControl>
               </div>
             )}
-            <Button
+            {/* <Button
               style={{
                 backgroundColor: "rgb(0, 32, 96)",
                 color: "#FFFFFF",
@@ -211,40 +223,39 @@ const Center = () => {
                   setSearch(!search);
                   setShowCenter(true);
                   console.log(search);
+                } else if (stateValue !== "" && districtValue !== "") {
+                  setShowCenter(true);
                 } else {
                   alert("please enter pin");
                 }
               }}
             >
               SEARCH
-            </Button>
+            </Button> */}
           </div>
         </div>
         <div id="show-center">
           {showCenter && (
-            <TableContainer component="Paper">
+            <TableContainer>
               <Table
                 style={{ border: "1px black solid", textAlign: "center" }}
-                className={classes.table}
                 aria-label="simple table"
               >
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="left">Hospital Name</TableCell>
+                <TableHead headerAlign="left">
+                  <TableRow
+                    style={{ border: "1px black solid", textAlign: "center" }}
+                  >
+                    <TableCell style={{ textAlign: "center" }} align="left">
+                      Hospital Name
+                    </TableCell>
                     <TableCell align="left">Address</TableCell>
                     <TableCell align="left">Fee Type</TableCell>
                     <TableCell align="left">Vaccine Available</TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody
-                // style={{
-                //   display: "flex",
-                //   flexDirection: "column",
-                //   justifyContent: "flex-end",
-                // }}
-                >
-                  {recordByPin.map((row, index) => (
-                    <TableRow align="center" key={index}>
+                <TableBody>
+                  {record.map((row, index) => (
+                    <TableRow align="left" key={index}>
                       <TableCell align="center">{row.hospName}</TableCell>
                       <TableCell align="center">{row.address}</TableCell>
                       <TableCell align="center">{row.feeType}</TableCell>
@@ -282,3 +293,4 @@ export default Center;
               })}
             </table> */
 }
+//className={classes.table} component="Paper"

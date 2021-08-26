@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500&display=swap");
-$primaryColor: #fff;
+$primaryColor: rgb(246, 246, 246);
+$white: #fff;
 $darkBlue: rgb(0, 32, 96);
 $masturdYellow: rgb(255, 192, 2);
 
@@ -46,7 +47,7 @@ a {
 
 .Login {
   @include flexDisplay;
-  background-color: $primaryColor;
+  background-color: $white;
   width: 60%;
   height: 60%;
   margin: 3% 0;
@@ -60,6 +61,10 @@ a {
     p {
       padding: 1% 0;
     }
+
+    #verification-heading {
+      color: green;
+    }
   }
 
   .login-form {
@@ -67,7 +72,7 @@ a {
     align-items: center;
     width: 100%;
     padding: 10% 0;
-    #login-input {
+    .login-input {
       margin: 1% 0;
       padding: 0;
       width: 30rem;
@@ -87,6 +92,7 @@ a {
   #nav-bar {
     @include flexDisplay;
     justify-content: flex-end;
+    align-items: center;
     flex-direction: row;
     width: 50%;
     margin-right: 5%;
@@ -106,28 +112,51 @@ a {
   }
 }
 
-#Center {
+#about,
+#home,
+#contact {
+  @include flexDisplay;
+  align-items: center;
+
+  justify-content: center;
+
   width: 100%;
-  height: 70vh;
-  text-align: center;
+  height: 100%;
 
   h1 {
-    margin-top: 3%;
+    font-weight: 400;
+    margin: 1rem 0;
+  }
+}
+
+#home {
+  a {
+    color: $darkBlue;
+    font-size: 1.2rem;
+  }
+}
+
+#Center {
+  width: 100%;
+  height: auto;
+  text-align: center;
+  background-color: $primaryColor;
+
+  h1 {
+    margin-top: 1%;
   }
 
   #center-container {
     @include flexDisplay;
     justify-content: center;
     align-items: center;
-    height: 50%;
-    margin: 3% 0;
+    height: 100%;
+    margin: 0;
 
     #get-center {
       @include flexDisplay;
       align-items: center;
       width: 100%;
-      height: auto;
-      margin: 10% 0;
 
       #center-btns {
         @include flexRowDisplay;
@@ -145,6 +174,7 @@ a {
         align-items: flex-start;
         width: 70%;
         height: auto;
+        margin: 0 0 3% 0;
 
         #center-input-pin {
           width: 30rem;
@@ -187,30 +217,6 @@ a {
 }
 #form-control {
   margin: 0 3%;
-}
-
-#about,
-#home,
-#contact {
-  @include flexDisplay;
-  align-items: center;
-
-  justify-content: center;
-
-  width: 100%;
-  height: 100%;
-
-  h1 {
-    font-weight: 400;
-    margin: 1rem 0;
-  }
-}
-
-#home {
-  a {
-    color: $darkBlue;
-    font-size: 1.2rem;
-  }
 }
 
 #about {

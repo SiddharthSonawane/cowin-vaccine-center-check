@@ -1,12 +1,16 @@
-import React, { useCallback } from "react";
+import React from "react";
+
 import { Button } from "@material-ui/core";
+
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 
-const Navigation = () => {
+const Navigation = ({ logoutBtn }) => {
   const history = useHistory();
 
-  const handleClick = () => history.push("/login");
+  const logoutEvent = () => {
+    console.log("logging out");
+  };
 
   return (
     <div id="Nav">
@@ -21,19 +25,39 @@ const Navigation = () => {
           <Link to="/contact">Contact</Link>
         </li>
 
-        <Button
-          className="nav-btn nav-items"
-          style={{
-            backgroundColor: "rgb(255,192,2)",
-            color: "#FFFFFF",
-            borderRadius: "50px",
-          }}
-          onClick={handleClick}
-          type="submit"
-          variant="contained"
-        >
-          <Link to="/login">REGISTER / SIGN IN</Link>
-        </Button>
+        {logoutBtn ? (
+          <Button
+            className="nav-btn nav-items"
+            style={{
+              color: "#FFFFFF",
+              borderRadius: "50px",
+              width: "10rem",
+              height: "3rem",
+              fontSize: "1.1rem",
+            }}
+            variant="contained"
+            color="secondary"
+            onClick={logoutEvent}
+          >
+            Logout
+          </Button>
+        ) : (
+          <Button
+            className="nav-btn nav-items"
+            style={{
+              backgroundColor: "rgb(255,192,2)",
+              color: "#FFFFFF",
+              borderRadius: "50px",
+              width: "15rem",
+              height: "3rem",
+            }}
+            onClick={() => history.push("/login")}
+            type="submit"
+            variant="contained"
+          >
+            <Link to="/login">SIGN IN</Link>
+          </Button>
+        )}
       </ul>
     </div>
   );
