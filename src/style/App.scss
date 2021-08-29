@@ -139,18 +139,17 @@ a {
 #Center {
   width: 100%;
   height: auto;
-  text-align: center;
   background-color: $primaryColor;
-
+  text-align: center;
   h1 {
-    margin-top: 1%;
+    margin: 3% 0 5% 0;
   }
 
   #center-container {
     @include flexDisplay;
     justify-content: center;
     align-items: center;
-    height: 100%;
+
     margin: 0;
 
     #get-center {
@@ -162,7 +161,7 @@ a {
         @include flexRowDisplay;
         margin: 3% 0;
         padding: 0 0 0 3rem;
-        justify-content: flex-start;
+        justify-content: center;
         align-items: flex-start;
         width: 70%;
         height: auto;
@@ -172,27 +171,33 @@ a {
         @include flexRowDisplay;
         justify-content: center;
         align-items: flex-start;
-        width: 70%;
-        height: auto;
-        margin: 0 0 3% 0;
+        width: 100%;
 
+        margin: 0;
         #center-input-pin {
           width: 30rem;
           padding: 3%;
           border-radius: 50px;
-          border: 1px rgb(189, 188, 188) solid;
         }
-
-        #select-by-district {
-          @include flexRowDisplay;
+        .select-by-district {
+          @include flexDisplay;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          .pin-dist-select {
+            @include flexRowDisplay;
+            margin-bottom: 1%;
+          }
         }
       }
     }
-    #show-center {
-      width: 50%;
+    .show-center {
+      width: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
+      margin: 5% 0;
+
       table {
         th {
           width: 100%;

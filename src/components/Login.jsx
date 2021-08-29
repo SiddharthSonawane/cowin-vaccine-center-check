@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Input, Button } from "@material-ui/core";
-import { Switch, Route, useHistory } from "react-router";
+import { useHistory } from "react-router";
 
 const Login = ({ setAuthentication, setTxn }) => {
   const [mobileNumber, setMobileNumber] = useState(0);

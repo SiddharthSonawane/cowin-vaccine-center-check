@@ -21,7 +21,11 @@ const App = () => {
   const [txn, setTxn] = useState("");
   return (
     <div className="App">
-      <Navigation logoutBtn={verifyAuth} />
+      <Navigation
+        logoutBtn={verifyAuth}
+        setVerifyAuth={setVerifyAuth}
+        setAuthentication={setAuthentication}
+      />
       <Switch>
         <Route exact path="/">
           <Home />
@@ -43,7 +47,7 @@ const App = () => {
           auth={authentication}
           setVerifyAuth={setVerifyAuth}
         />
-        <Protected path="/center" component={Center} auth={true} />
+        <Protected path="/center" component={Center} auth={verifyAuth} />
         <Route component={PageNotFound} />
       </Switch>
     </div>

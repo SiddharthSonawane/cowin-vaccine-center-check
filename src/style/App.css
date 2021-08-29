@@ -194,12 +194,12 @@ a {
 #Center {
   width: 100%;
   height: auto;
-  text-align: center;
   background-color: #f6f6f6;
+  text-align: center;
 }
 
 #Center h1 {
-  margin-top: 1%;
+  margin: 3% 0 5% 0;
 }
 
 #Center #center-container {
@@ -218,7 +218,6 @@ a {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  height: 100%;
   margin: 0;
 }
 
@@ -250,9 +249,9 @@ a {
           flex-direction: row;
   margin: 3% 0;
   padding: 0 0 0 3rem;
-  -webkit-box-pack: start;
-      -ms-flex-pack: start;
-          justify-content: flex-start;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   -webkit-box-align: start;
       -ms-flex-align: start;
           align-items: flex-start;
@@ -276,19 +275,36 @@ a {
   -webkit-box-align: start;
       -ms-flex-align: start;
           align-items: flex-start;
-  width: 70%;
-  height: auto;
-  margin: 0 0 3% 0;
+  width: 100%;
+  margin: 0;
 }
 
 #Center #center-container #get-center #center-input #center-input-pin {
   width: 30rem;
   padding: 3%;
   border-radius: 50px;
-  border: 1px #bdbcbc solid;
 }
 
-#Center #center-container #get-center #center-input #select-by-district {
+#Center #center-container #get-center #center-input .select-by-district {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+}
+
+#Center #center-container #get-center #center-input .select-by-district .pin-dist-select {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -298,10 +314,11 @@ a {
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
+  margin-bottom: 1%;
 }
 
-#Center #center-container #show-center {
-  width: 50%;
+#Center #center-container .show-center {
+  width: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -311,13 +328,14 @@ a {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  margin: 5% 0;
 }
 
-#Center #center-container #show-center table th {
+#Center #center-container .show-center table th {
   width: 100%;
 }
 
-#Center #center-container #show-center table th td {
+#Center #center-container .show-center table th td {
   margin: 0 30px;
   border: 1px black solid;
 }

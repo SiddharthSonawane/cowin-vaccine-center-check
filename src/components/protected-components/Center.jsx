@@ -1,82 +1,11 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Input,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@material-ui/core";
-import axios from "axios";
+import DataByPin from "./DataByPin";
+import DataByDistrict from "./DataByDistrict";
+
+import { Button } from "@material-ui/core";
 
 const Center = () => {
   const [showInput, setShowInput] = useState(true);
-  const [stateValue, setStateValue] = useState("");
-  const [districtValue, setDistrictValue] = useState("");
-  const [inputPin, setInputPin] = useState("");
-  const [record, setRecord] = useState([{}]);
-
-  const [allStates, setAllStates] = useState([]);
-  const [alldistricts, setAllDistricts] = useState([]);
-
-  const [search, setSearch] = useState(false);
-  const [showCenter, setShowCenter] = useState(false);
-
-  useEffect(() => {
-    const newData = async () => {
-      const myStatesData = await axios.get(
-        "https://cdn-api.co-vin.in/api/v2/admin/location/states"
-      );
-      let recordArr = [];
-      console.log(myStatesData);
-      myStatesData.data.states.forEach((e) => {
-        recordArr.push(e.state_name);
-        console.log(e.state_id, e.state_name);
-      });
-      setAllStates(recordArr);
-    };
-    newData();
-  }, []);
-
-  useEffect(() => {
-    setRecord([{}]);
-  }, [inputPin]);
-
-  // useEffect(() => {
-  //   const date = new Date();
-  //   const utc = new Date().toJSON().slice(0, 10).split("-").reverse().join("-");
-  //   const dataByPin = async () => {
-  //     const pinData = await axios.get(
-  //       "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=" +
-  //         inputPin +
-  //         "&date=" +
-  //         utc
-  //     );
-
-  //     pinData.data.sessions.forEach((e) => {
-  //       setRecord((prev) => {
-  //         return [
-  //           ...prev,
-  //           {
-  //             hospName: e.name,
-  //             address: e.address,
-  //             feeType: e.fee_type,
-  //             vaccine: e.vaccine,
-  //           },
-  //         ];
-  //       });
-  //     });
-  //     // const { name } = pinData.data.sessions;
-  //   };
-
-  //   dataByPin();
-  // }, [search]);
 
   return (
     <div id="Center">
@@ -86,9 +15,12 @@ const Center = () => {
           <div id="center-btns">
             <Button
               style={{
-                margin: "0 0 0 12rem",
+                margin: "0 3rem 0 0",
                 borderRadius: "50px",
                 backgroundColor: "rgb(255,192,2)",
+                fontSize: "1.2rem",
+                color: "black",
+                padding: "0.5rem 3rem",
               }}
               variant="contained"
               color="primary"
@@ -101,9 +33,12 @@ const Center = () => {
             </Button>
             <Button
               style={{
-                margin: "0 1rem 0 7rem",
+                margin: "0 0 0 1rem",
                 borderRadius: "50px",
                 backgroundColor: "rgb(255,192,2)",
+                color: "black",
+                padding: "0.5rem 3rem",
+                fontSize: "1.2rem",
               }}
               variant="contained"
               color="primary"
@@ -116,156 +51,8 @@ const Center = () => {
             </Button>
           </div>
           <div id="center-input">
-            {showInput ? (
-              <div>
-                <Input
-                  style={{ backgroundColor: "white", borderRadius: "50px" }}
-                  id="center-input-pin"
-                  placeholder="Enter your area PINCODE"
-                  disableUnderline={true}
-                  value={inputPin}
-                  onChange={(e) => {
-                    setInputPin(e.target.value);
-                  }}
-                ></Input>
-                <Button
-                  style={{
-                    backgroundColor: "rgb(0, 32, 96)",
-                    color: "#FFFFFF",
-                    width: "auto",
-                    height: "auto",
-                    margin: "0 5rem",
-                    padding: "1rem 3rem",
-                    borderRadius: "50px",
-                  }}
-                  onClick={() => {
-                    if (inputPin !== "") {
-                      setSearch(!search);
-                      setShowCenter(true);
-                      console.log(search);
-                    } else {
-                      alert("please enter pin");
-                    }
-                  }}
-                >
-                  SEARCH
-                </Button>
-              </div>
-            ) : (
-              <div id="select-by-district">
-                <FormControl id="form-control" variant="outlined">
-                  <InputLabel id="demo-simple-select-outlined-label">
-                    State
-                  </InputLabel>
-                  <Select
-                    onChange={async (e, index) => {
-                      setStateValue(e.target.value);
-                      setRecord([{}]);
-                      const myDistrictData = await axios.get(
-                        "https://cdn-api.co-vin.in/api/v2/admin/location/districts/" +
-                          index.props.value
-                      );
-
-                      let somArr = [];
-                      myDistrictData.data.districts.forEach((e) => {
-                        somArr.push(e.district_name);
-                      });
-
-                      setAllDistricts(somArr);
-                      console.log(alldistricts);
-                    }}
-                    style={{ borderRadius: "50px", backdropFilter: "white" }}
-                    labelId="demo-simple-select-outlined-label"
-                    id="demo-simple-select-outlined"
-                    value={stateValue}
-                    label="State"
-                    required
-                  >
-                    {allStates.map((state, index) => {
-                      return <MenuItem value={index}>{state}</MenuItem>;
-                    })}
-                  </Select>
-                </FormControl>
-                <FormControl id="form-control" variant="outlined">
-                  <InputLabel id="demo-simple-select-outlined-label">
-                    District
-                  </InputLabel>
-                  <Select
-                    onChange={(e) => {
-                      setDistrictValue(e.target.value);
-                    }}
-                    style={{ borderRadius: "50px", backdropFilter: "white" }}
-                    labelId="demo-simple-select-outlined-label"
-                    id="demo-simple-select-outlined"
-                    value={districtValue}
-                    label="State"
-                    required
-                  >
-                    {alldistricts.map((district, index) => {
-                      return <MenuItem value={index}>{district}</MenuItem>;
-                    })}
-                  </Select>
-                </FormControl>
-              </div>
-            )}
-            {/* <Button
-              style={{
-                backgroundColor: "rgb(0, 32, 96)",
-                color: "#FFFFFF",
-                width: "auto",
-                height: "auto",
-                margin: "0 5rem",
-                padding: "1rem 3rem",
-                borderRadius: "50px",
-              }}
-              onClick={() => {
-                if (inputPin !== "") {
-                  setSearch(!search);
-                  setShowCenter(true);
-                  console.log(search);
-                } else if (stateValue !== "" && districtValue !== "") {
-                  setShowCenter(true);
-                } else {
-                  alert("please enter pin");
-                }
-              }}
-            >
-              SEARCH
-            </Button> */}
+            {showInput ? <DataByPin /> : <DataByDistrict />}
           </div>
-        </div>
-        <div id="show-center">
-          {showCenter && (
-            <TableContainer>
-              <Table
-                style={{ border: "1px black solid", textAlign: "center" }}
-                aria-label="simple table"
-              >
-                <TableHead headerAlign="left">
-                  <TableRow
-                    style={{ border: "1px black solid", textAlign: "center" }}
-                  >
-                    <TableCell style={{ textAlign: "center" }} align="left">
-                      Hospital Name
-                    </TableCell>
-                    <TableCell align="left">Address</TableCell>
-                    <TableCell align="left">Fee Type</TableCell>
-                    <TableCell align="left">Vaccine Available</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {record.map((row, index) => (
-                    <TableRow align="left" key={index}>
-                      <TableCell align="center">{row.hospName}</TableCell>
-                      <TableCell align="center">{row.address}</TableCell>
-                      <TableCell align="center">{row.feeType}</TableCell>
-                      <TableCell align="center">{row.vaccine}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          )}
         </div>
       </div>
     </div>
@@ -294,3 +81,10 @@ export default Center;
             </table> */
 }
 //className={classes.table} component="Paper"
+//res.data.districts.forEach((e) => {
+//   setAllDistricts((prev) => {
+//     return [...prev, e];
+//   });
+// });
+
+//{showInput ? <DataByPin /> : <DataByDistrict />}

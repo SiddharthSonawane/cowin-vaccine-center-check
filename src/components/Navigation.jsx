@@ -5,11 +5,13 @@ import { Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 
-const Navigation = ({ logoutBtn }) => {
+const Navigation = ({ logoutBtn, setAuthentication, setVerifyAuth }) => {
   const history = useHistory();
 
   const logoutEvent = () => {
-    console.log("logging out");
+    setVerifyAuth(false);
+    setAuthentication(false);
+    history.push("/");
   };
 
   return (
